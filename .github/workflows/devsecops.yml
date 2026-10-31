@@ -44,3 +44,7 @@ jobs:
       promote: true
       findings-bucket: ${{ vars.FINDINGS_BUCKET }}
       templates-ref: fix/sca-artefacto
+    # Modo usuario_iam: GitHub solo expone los secrets de ENVIRONMENT a un workflow
+    # reutilizable si el caller usa "secrets: inherit". Riesgo aceptado (ver
+    # .devsecops/suppressions.yml).
+    secrets: inherit
