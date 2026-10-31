@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   devsecops:
-    uses: Taller-de-proyectos-2027-I/devsecops-templates/.github/workflows/devsecops-pipeline.yml@fix/sca-artefacto
+    uses: Taller-de-proyectos-2027-I/devsecops-templates/.github/workflows/devsecops-pipeline.yml@v1
     with:
       grupo: g00
       sprint: ${{ vars.SPRINT_ACTUAL }}      # variable del repo, la actualiza el líder
@@ -43,7 +43,7 @@ jobs:
       openapi-path: /v3/api-docs
       promote: true
       findings-bucket: ${{ vars.FINDINGS_BUCKET }}
-      templates-ref: fix/sca-artefacto
+      templates-ref: v1
     # Modo usuario_iam: GitHub solo expone los secrets de ENVIRONMENT a un workflow
     # reutilizable si el caller usa "secrets: inherit". Riesgo aceptado (ver
     # .devsecops/suppressions.yml).
