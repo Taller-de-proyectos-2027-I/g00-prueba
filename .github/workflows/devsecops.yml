@@ -8,6 +8,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      mantener_staging:
+        description: "Modo demostración: dejar el staging encendido (consume créditos)"
+        type: boolean
+        default: false
 
 # Un solo pipeline por rama a la vez (evita dos despliegues simultáneos a staging)
 concurrency:
@@ -21,7 +26,7 @@ permissions:
 
 jobs:
   devsecops:
-    uses: Taller-de-proyectos-2027-I/devsecops-templates/.github/workflows/devsecops-pipeline.yml@v1
+    uses: Taller-de-proyectos-2027-I/devsecops-templates/.github/workflows/devsecops-pipeline.yml@fase1/herramientas-demo
     with:
       grupo: g00
       sprint: ${{ vars.SPRINT_ACTUAL }}      # variable del repo, la actualiza el líder
@@ -33,17 +38,18 @@ jobs:
       dockerfile: Dockerfile
       # Despliegue solo en push a main y cuando AWS ya está configurado (variable AWS_ROLE_ARN);
       # en PR corre únicamente la etapa de integración
-      deploy: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.AWS_ROLE_ARN != '' }}
+      deploy: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' && vars.AWS_ROLE_ARN != '' }}
       aws-region: us-east-2
       aws-role-arn: ${{ vars.AWS_ROLE_ARN }}
       ecr-repository: taller/g00
       tf-state-bucket: ${{ vars.TF_STATE_BUCKET }}
-      ephemeral-staging: true
+      # Siempre efímero, salvo en una ejecución manual con "mantener_staging" marcado
+      ephemeral-staging: ${{ !(github.event_name == 'workflow_dispatch' && inputs.mantener_staging) }}
       health-path: /actuator/health
       openapi-path: /v3/api-docs
       promote: true
       findings-bucket: ${{ vars.FINDINGS_BUCKET }}
-      templates-ref: v1
+      templates-ref: fase1/herramientas-demo
     # Modo usuario_iam: GitHub solo expone los secrets de ENVIRONMENT a un workflow
     # reutilizable si el caller usa "secrets: inherit". Riesgo aceptado (ver
     # .devsecops/suppressions.yml).
