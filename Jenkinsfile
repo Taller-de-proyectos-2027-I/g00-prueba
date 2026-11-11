@@ -1,3 +1,3 @@
-// Pipeline DevSecOps en Jenkins (prototipo). La lógica vive en devsecops-templates/jenkins/library.
-@Library('devsecops') _
-devsecopsPipeline(grupo: 'g00')
+// PRUEBA: usa la rama reporte-html de devsecops-templates (no fusionar)
+@Library('devsecops@reporte-html') _
+devsecopsPipeline(grupo: 'g00', templatesRef: 'reporte-html')
