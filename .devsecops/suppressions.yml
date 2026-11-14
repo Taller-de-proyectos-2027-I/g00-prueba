@@ -21,3 +21,9 @@
     organización fijado en @v1 y las llaves solo existen en environments limitados a main.
   aprobado_por: "devsecops"
   expira: 2027-03-31
+- regla: "40042"                 # ZAP: Spring Actuator Information Leak
+  justificacion: >-
+    /actuator/health es el único endpoint expuesto (management.endpoints.web.exposure.include=health)
+    y responde solo {"status":"UP"} (show-details=never). Lo necesitan el staging y los health checks.
+  aprobado_por: "devsecops"
+  expira: 2027-03-31
