@@ -8,7 +8,9 @@ RUN mvn -B -ntp -DskipTests package
 
 # --- Etapa 2: ejecución (imagen mínima y usuario sin privilegios) --------------
 FROM eclipse-temurin:21-jre-alpine
-RUN apk add --no-cache curl \
+# apk upgrade aplica los parches de seguridad publicados después de la imagen base
+RUN apk upgrade --no-cache \
+ && apk add --no-cache curl \
  && addgroup -S app && adduser -S app -G app
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
