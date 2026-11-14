@@ -1,2 +1,2 @@
-@Library('devsecops@fase2/calidad-sonar') _
-devsecopsPipeline(grupo: 'g00', templatesRef: 'fase2/calidad-sonar', coberturaMinima: 60)
+@Library('devsecops') _
+devsecopsPipeline(grupo: 'g00', coberturaMinima: 60)   // umbral de cobertura: lo define el QA líder
