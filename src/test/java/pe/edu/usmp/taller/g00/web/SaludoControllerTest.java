@@ -7,20 +7,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import pe.edu.usmp.taller.g00.SaludoController;
+import org.springframework.web.context.WebApplicationContext;
 
+/**
+ * Pruebas con el contexto completo de Spring (validación, manejador de errores y
+ * filtro de cabeceras tal como corren en producción).
+ */
+@SpringBootTest
 class SaludoControllerTest {
+
+    @Autowired
+    private WebApplicationContext contexto;
+
+    @Autowired
+    private CabecerasSeguridadFilter cabeceras;
 
     private MockMvc mvc;
 
     @BeforeEach
     void preparar() {
-        mvc = MockMvcBuilders.standaloneSetup(new SaludoController())
-                .setControllerAdvice(new ManejadorErrores())
-                .addFilters(new CabecerasSeguridadFilter())
-                .build();
+        mvc = MockMvcBuilders.webAppContextSetup(contexto).addFilters(cabeceras).build();
     }
 
     @Test
